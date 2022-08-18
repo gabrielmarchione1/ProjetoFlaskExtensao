@@ -50,10 +50,20 @@ def login():
 # rota para validar o formulario
 @app.route("/login_validar", methods=["POST"])
 def login_validar():
-    if request.form["usuario"] == "poyatos" and request.form["senha"] == "12345":
+    if request.form["usuario"] == "marchione" and request.form["senha"] == "12345":
         session["usuario"] = request.form["usuario"]
         session["codigo"] = 1
+        return redirect(url_for("acesso_restrito"))
     else:
         return "Usuário/senha inválidos, digite novamente.", 200
+
+
+# Rota para a área restrita
+@app.route("/restrito")
+def acesso_restrito():
+    if session["codigo"] == 1:
+        return "Bem-vindo à area restrita!!<br>Usuário: {}<br>Código: {}".format(session["usuario"], session["codigo"]), 200
+    else:
+        return "Acesso inválido", 200
 
 app.run()
