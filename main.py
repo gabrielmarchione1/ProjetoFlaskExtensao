@@ -1,7 +1,10 @@
 # coding: utf-8
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, redirect, url_for
 
 app = Flask("projeto")
+# criando uma chave de criptografia
+app.secret_key = '*WY#E@HDHWAKDJ213231Shdjahda8w342'
+
 
 # rota raiz
 @app.route("/")
@@ -36,5 +39,21 @@ def form_recebe():
         return "Nome: {}".format(nome), 200
     else:
         return "Não pode chamar direto no GET", 200
+
+
+# rota form de login
+@app.route("/login")
+def login():
+    return render_template("login.html"), 200
+
+
+# rota para validar o formulario
+@app.route("/login_validar", methods=["POST"])
+def login_validar():
+    if request.form["usuario"] == "poyatos" and request.form["senha"] == "12345":
+        session["usuario"] = request.form["usuario"]
+        session["codigo"] = 1
+    else:
+        return "Usuário/senha inválidos, digite novamente.", 200
 
 app.run()
